@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const green = Color(0xFF0BBF72);
 const darkGreen = Color(0xFF003E2F);
@@ -652,12 +653,66 @@ class PassengerSettings extends StatelessWidget {
   const PassengerSettings({super.key});
   @override
   Widget build(BuildContext context) => PassengerSubpage(title: 'Configurações', subtitle: 'Personalize sua experiência no eMove', children: [
-    SecurityTile(icon: Icons.tune, title: 'Preferências do app', subtitle: 'Escolha como o aplicativo funciona', onTap: () {}),
+    SecurityTile(icon: Icons.tune, title: 'Preferências do app', subtitle: 'Escolha como o aplicativo funciona', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerAppPreferences()))),
     SecurityTile(icon: Icons.translate, title: 'Idioma', subtitle: 'Português (Brasil)', onTap: () {}),
     SecurityTile(icon: Icons.light_mode_outlined, title: 'Aparência', subtitle: 'Tema claro', onTap: () {}),
     SecurityTile(icon: Icons.volume_up_outlined, title: 'Som e vibração', subtitle: 'Sons e alertas do aplicativo', onTap: () {}),
     SecurityTile(icon: Icons.info_outline, title: 'Sobre o eMove', subtitle: 'Versão, termos e informações do app', onTap: () {}),
     TextButton.icon(onPressed: () {}, icon: const Icon(Icons.refresh, color: green), label: const Text('Restaurar preferências', style: TextStyle(color: green, fontSize: 16))),
+  ]);
+}
+
+class PassengerAppPreferences extends StatefulWidget {
+  const PassengerAppPreferences({super.key});
+  @override
+  State<PassengerAppPreferences> createState() => _PassengerAppPreferencesState();
+}
+
+class _PassengerAppPreferencesState extends State<PassengerAppPreferences> {
+  final values = <String, bool>{
+    'confirm_trip': true,
+    'show_fare': true,
+    'suggestions': true,
+    'data_saver': false,
+  };
+  @override
+  void initState() { super.initState(); _load(); }
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() { for (final key in values.keys) { values[key] = prefs.getBool(key) ?? values[key]!; } });
+  }
+  Future<void> _set(String key, bool value) async {
+    setState(() => values[key] = value);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, value);
+  }
+  Future<void> _reset() async {
+    final prefs = await SharedPreferences.getInstance();
+    for (final key in values.keys) { await prefs.remove(key); }
+    setState(() { values['confirm_trip'] = true; values['show_fare'] = true; values['suggestions'] = true; values['data_saver'] = false; });
+  }
+  Widget _toggle({required IconData icon, required String title, required String subtitle, required String key}) => Card(
+    margin: const EdgeInsets.only(bottom: 10),
+    elevation: 0,
+    shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.black12), borderRadius: BorderRadius.circular(14)),
+    child: SwitchListTile.adaptive(
+      secondary: Icon(icon, color: green, size: 27),
+      title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+      subtitle: Text(subtitle),
+      value: values[key]!,
+      activeColor: green,
+      onChanged: (value) => _set(key, value),
+    ),
+  );
+  @override
+  Widget build(BuildContext context) => PassengerSubpage(title: 'Preferências do app', subtitle: 'Personalize sua experiência', children: [
+    _toggle(icon: Icons.fact_check_outlined, title: 'Confirmação antes de solicitar viagem', subtitle: 'Revise os dados antes de confirmar', key: 'confirm_trip'),
+    _toggle(icon: Icons.payments_outlined, title: 'Mostrar estimativa de valor', subtitle: 'Veja o valor antes de solicitar', key: 'show_fare'),
+    _toggle(icon: Icons.auto_awesome_outlined, title: 'Sugestões de destinos', subtitle: 'Receba recomendações úteis', key: 'suggestions'),
+    SecurityTile(icon: Icons.location_on_outlined, title: 'Locais favoritos', subtitle: 'Casa, trabalho e outros endereços', onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Locais favoritos estará disponível nesta etapa.')))),
+    _toggle(icon: Icons.signal_cellular_alt_outlined, title: 'Modo economia de dados', subtitle: 'Reduza o consumo de internet', key: 'data_saver'),
+    Center(child: TextButton(onPressed: _reset, child: const Text('Restaurar preferências', style: TextStyle(color: green, fontSize: 16)))),
   ]);
 }
 
