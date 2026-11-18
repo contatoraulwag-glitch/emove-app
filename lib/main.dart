@@ -526,12 +526,72 @@ class PassengerTripsHelp extends StatelessWidget {
   const PassengerTripsHelp({super.key});
   @override
   Widget build(BuildContext context) => PassengerSubpage(title: 'Viagens e corridas', subtitle: 'Encontre respostas sobre suas viagens', children: [
-    _HelpFlowTile(icon: Icons.alt_route_outlined, title: 'Solicitar uma viagem', subtitle: 'Como pedir e acompanhar uma viagem', onTap: () {}),
-    _HelpFlowTile(icon: Icons.directions_car_outlined, title: 'Durante a viagem', subtitle: 'Informações sobre o trajeto e a corrida', onTap: () {}),
-    _HelpFlowTile(icon: Icons.cancel_outlined, title: 'Cancelar uma viagem', subtitle: 'Veja quando e como cancelar', onTap: () {}),
-    _HelpFlowTile(icon: Icons.warning_amber_outlined, title: 'Problemas na viagem', subtitle: 'Relate um problema ou ocorrência', onTap: () {}),
-    _HelpFlowTile(icon: Icons.history_outlined, title: 'Histórico de viagens', subtitle: 'Consulte suas viagens anteriores', onTap: () {}),
+    _HelpFlowTile(icon: Icons.alt_route_outlined, title: 'Solicitar uma viagem', subtitle: 'Como pedir e acompanhar uma viagem', onTap: () => _openHelpFlow(context, 'Solicitar uma viagem', 'Como solicitar uma viagem', const [
+      ['Como informar o destino?', 'Digite o endereço de destino na tela inicial e escolha uma das sugestões apresentadas.'],
+      ['Como confirmar o local de embarque?', 'Confira o ponto de embarque no mapa e ajuste o endereço antes de confirmar a solicitação.'],
+      ['Como acompanhar a busca por motorista?', 'Depois de solicitar, acompanhe o status da busca na tela da viagem.'],
+      ['Como cancelar uma solicitação?', 'Abra os detalhes da viagem e toque em Cancelar viagem.'],
+      ['O que fazer se não encontrar motorista?', 'Aguarde alguns instantes, confira o local de embarque ou tente solicitar novamente.'],
+    ])),
+    _HelpFlowTile(icon: Icons.directions_car_outlined, title: 'Durante a viagem', subtitle: 'Informações sobre o trajeto e a corrida', onTap: () => _openHelpFlow(context, 'Durante a viagem', 'Acompanhe sua viagem com segurança', const [
+      ['Como acompanhar o trajeto?', 'Acompanhe o deslocamento e o destino pelos detalhes da viagem.'],
+      ['Como confirmar se estou no veículo certo?', 'Confira o nome do motorista, modelo, cor e placa antes de embarcar.'],
+      ['Como compartilhar minha viagem?', 'Use a opção de compartilhar viagem para enviar os dados do trajeto a uma pessoa de confiança.'],
+      ['O que fazer em caso de emergência?', 'Em uma emergência, procure um local seguro e acione os serviços de emergência. Depois, fale com o suporte.'],
+      ['Como entrar em contato com o motorista?', 'Use o botão de contato disponível nos detalhes da viagem ativa.'],
+    ])),
+    _HelpFlowTile(icon: Icons.cancel_outlined, title: 'Cancelar uma viagem', subtitle: 'Veja quando e como cancelar', onTap: () => _openHelpFlow(context, 'Cancelar uma viagem', 'Saiba como cancelar sua viagem', const [
+      ['Como cancelar antes do motorista chegar?', 'Abra a viagem ativa, toque em Cancelar viagem e confirme a ação.'],
+      ['Existe taxa de cancelamento?', 'Quando aplicável, a informação da taxa será mostrada antes da confirmação.'],
+      ['Como informar o motivo do cancelamento?', 'Selecione o motivo apresentado após tocar em Cancelar viagem.'],
+      ['O que fazer se a viagem foi cancelada pelo motorista?', 'Você poderá solicitar outra viagem ou falar com o suporte.'],
+      ['Como contestar uma cobrança de cancelamento?', 'Abra o suporte e envie os detalhes da cobrança para análise.'],
+    ])),
+    _HelpFlowTile(icon: Icons.warning_amber_outlined, title: 'Problemas na viagem', subtitle: 'Relate um problema ou ocorrência', onTap: () => _openHelpFlow(context, 'Problemas na viagem', 'Encontre ajuda para resolver sua viagem', const [
+      ['O motorista não apareceu', 'Confira o ponto de embarque e tente entrar em contato. Se não resolver, relate o problema ao suporte.'],
+      ['O motorista tomou um caminho diferente', 'Registre a ocorrência nos detalhes da viagem e informe o suporte.'],
+      ['Esqueci um objeto no veículo', 'Abra o suporte, escolha a viagem e descreva o objeto esquecido.'],
+      ['Tive um problema durante a viagem', 'Procure um local seguro e relate o ocorrido pelo suporte.'],
+      ['Quero denunciar uma situação', 'Use o suporte para enviar os detalhes da situação e, se possível, anexar arquivos.'],
+      ['Preciso de ajuda com outra situação', 'Escolha esta opção para falar com a equipe e explicar o que aconteceu.'],
+    ])),
+    _HelpFlowTile(icon: Icons.history_outlined, title: 'Histórico de viagens', subtitle: 'Tire dúvidas sobre suas viagens anteriores', onTap: () => _openHelpFlow(context, 'Histórico de viagens', 'Tire suas dúvidas sobre suas viagens anteriores', const [
+      ['Onde encontro minhas viagens anteriores?', 'As viagens concluídas ficam disponíveis na aba Viagens, no histórico.'],
+      ['Como vejo os detalhes de uma viagem?', 'Toque na viagem desejada para consultar seus detalhes.'],
+      ['Como consultar o valor cobrado?', 'O valor aparece nos detalhes da viagem e também no histórico da Carteira.'],
+      ['Por quanto tempo o histórico fica disponível?', 'O histórico permanece disponível enquanto a conta estiver ativa, conforme a política do aplicativo.'],
+      ['O que fazer se uma viagem não aparecer?', 'Confira a conexão e tente novamente. Se continuar, entre em contato com o suporte.'],
+      ['Como contestar uma cobrança?', 'Abra a viagem ou a transação e envie uma solicitação pelo suporte.'],
+    ])),
   ]);
+
+  static void _openHelpFlow(BuildContext context, String title, String subtitle, List<List<String>> questions) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => PassengerHelpFlowPage(title: title, subtitle: subtitle, questions: questions)));
+  }
+}
+
+class PassengerHelpFlowPage extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final List<List<String>> questions;
+  const PassengerHelpFlowPage({super.key, required this.title, required this.subtitle, required this.questions});
+  @override
+  Widget build(BuildContext context) => PassengerSubpage(title: title, subtitle: subtitle, children: [
+    for (final item in questions) _HelpQuestionCard(question: item[0], answer: item[1]),
+  ]);
+}
+
+class _HelpQuestionCard extends StatelessWidget {
+  final String question;
+  final String answer;
+  const _HelpQuestionCard({required this.question, required this.answer});
+  @override
+  Widget build(BuildContext context) => Card(
+    margin: const EdgeInsets.only(bottom: 12),
+    elevation: 0,
+    shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.black12), borderRadius: BorderRadius.circular(14)),
+    child: ExpansionTile(title: Text(question, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16), children: [Align(alignment: Alignment.centerLeft, child: Text(answer, style: const TextStyle(color: Colors.black54, fontSize: 15)))]),
+  );
 }
 
 class PassengerAccountSecurity extends StatelessWidget {
