@@ -503,7 +503,7 @@ class PassengerHelp extends StatelessWidget {
     SecurityTile(icon: Icons.help_outline, title: 'Central de ajuda', subtitle: 'Encontre respostas para suas dúvidas', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerHelpCenter()))),
     SecurityTile(icon: Icons.headset_mic_outlined, title: 'Falar com o suporte', subtitle: 'Converse com nossa equipe', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerSupport()))),
     SecurityTile(icon: Icons.directions_car_outlined, title: 'Viagens e corridas', subtitle: 'Ajuda com solicitações e viagens', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerTripsHelp()))),
-    SecurityTile(icon: Icons.account_balance_wallet_outlined, title: 'Pagamentos', subtitle: 'Valores, carteira e cobranças', onTap: () {}),
+    SecurityTile(icon: Icons.account_balance_wallet_outlined, title: 'Pagamentos', subtitle: 'Valores, carteira e cobranças', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerPaymentHelp()))),
     SecurityTile(icon: Icons.shield_outlined, title: 'Segurança da conta', subtitle: 'Acesse orientações de segurança', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerAccountSecurity()))),
     const Center(child: Padding(padding: EdgeInsets.only(top: 12), child: Text('Atendimento eMove\nEstamos aqui para ajudar.', textAlign: TextAlign.center, style: TextStyle(color: darkGreen, fontSize: 16)))),
   ]);
@@ -628,6 +628,20 @@ class PassengerHelpCenter extends StatelessWidget {
     HelpCategory(title: 'Pagamentos', questions: const ['Quais formas de pagamento são aceitas?', 'Como adicionar um cartão?', 'Como consultar uma cobrança?', 'Como solicitar reembolso?']),
     HelpCategory(title: 'Conta e perfil', questions: const ['Como editar meus dados?', 'Como trocar a senha?', 'Como alterar telefone ou e-mail?', 'Como excluir a conta?']),
     HelpCategory(title: 'Segurança', questions: const ['Como proteger minha conta?', 'Como funciona a verificação em duas etapas?', 'O que fazer se eu perder o celular?', 'Como denunciar uma situação?']),
+  ]);
+}
+
+class PassengerPaymentHelp extends StatelessWidget {
+  const PassengerPaymentHelp({super.key});
+  @override
+  Widget build(BuildContext context) => PassengerSubpage(title: 'Pagamentos', subtitle: 'Encontre respostas sobre pagamentos e cobranças', children: [
+    const _HelpQuestionCard(question: 'Como adicionar uma forma de pagamento?', answer: 'Acesse a Carteira, escolha Forma de pagamento e siga as instruções para adicionar um cartão ou outra opção disponível.'),
+    const _HelpQuestionCard(question: 'Por que meu pagamento foi recusado?', answer: 'Confira os dados da forma de pagamento, o limite disponível e se o cartão está válido. Se o problema continuar, tente outra forma de pagamento.'),
+    const _HelpQuestionCard(question: 'Como consultar uma cobrança?', answer: 'Abra o histórico da viagem ou a Carteira para consultar os detalhes e o valor cobrado.'),
+    const _HelpQuestionCard(question: 'Como solicitar um reembolso?', answer: 'Abra os detalhes da viagem, entre em contato com o suporte e informe o motivo da solicitação.'),
+    const _HelpQuestionCard(question: 'O que fazer se fui cobrado duas vezes?', answer: 'Confira se uma das cobranças está apenas pendente. Se as duas forem confirmadas, envie os dados ao suporte para análise.'),
+    const _HelpQuestionCard(question: 'Como obter o comprovante da viagem?', answer: 'Abra os detalhes da viagem concluída e procure a opção de comprovante.'),
+    const _HelpQuestionCard(question: 'Outra dúvida sobre pagamento?', answer: 'Fale com o suporte pelo formulário de atendimento e descreva o que aconteceu.'),
   ]);
 }
 
