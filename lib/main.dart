@@ -654,13 +654,31 @@ class PassengerSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) => PassengerSubpage(title: 'Configurações', subtitle: 'Personalize sua experiência no eMove', children: [
     SecurityTile(icon: Icons.tune, title: 'Preferências do app', subtitle: 'Escolha como o aplicativo funciona', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerAppPreferences()))),
-    SecurityTile(icon: Icons.translate, title: 'Idioma', subtitle: 'Português (Brasil)', onTap: () {}),
-    SecurityTile(icon: Icons.light_mode_outlined, title: 'Aparência', subtitle: 'Tema claro', onTap: () {}),
-    SecurityTile(icon: Icons.volume_up_outlined, title: 'Som e vibração', subtitle: 'Sons e alertas do aplicativo', onTap: () {}),
-    SecurityTile(icon: Icons.info_outline, title: 'Sobre o eMove', subtitle: 'Versão, termos e informações do app', onTap: () {}),
-    TextButton.icon(onPressed: () {}, icon: const Icon(Icons.refresh, color: green), label: const Text('Restaurar preferências', style: TextStyle(color: green, fontSize: 16))),
+    SecurityTile(icon: Icons.translate, title: 'Idioma', subtitle: 'Português (Brasil)', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerChoicePage(title: 'Idioma', subtitle: 'Escolha o idioma do aplicativo', options: ['Português (Brasil)', 'English', 'Español'])))),
+    SecurityTile(icon: Icons.light_mode_outlined, title: 'Aparência', subtitle: 'Tema claro', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerChoicePage(title: 'Aparência', subtitle: 'Escolha como o eMove será exibido', options: ['Claro', 'Escuro', 'Usar configuração do aparelho'])))),
+    SecurityTile(icon: Icons.volume_up_outlined, title: 'Sons e vibração', subtitle: 'Sons e alertas do aplicativo', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerSoundSettings()))),
+    SecurityTile(icon: Icons.info_outline, title: 'Sobre o eMove', subtitle: 'Versão, termos e informações do app', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerAbout()))),
+    TextButton.icon(onPressed: () => showDialog(context: context, builder: (_) => AlertDialog(title: const Text('Restaurar preferências'), content: const Text('As preferências serão restauradas para os valores originais.'), actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')), TextButton(onPressed: () { Navigator.pop(context); ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Preferências restauradas.'))); }, child: const Text('Restaurar'))])), icon: const Icon(Icons.refresh, color: green), label: const Text('Restaurar preferências', style: TextStyle(color: green, fontSize: 16))),
   ]);
 }
+
+class PassengerChoicePage extends StatefulWidget {
+  final String title; final String subtitle; final List<String> options;
+  const PassengerChoicePage({super.key, required this.title, required this.subtitle, required this.options});
+  @override State<PassengerChoicePage> createState() => _PassengerChoicePageState();
+}
+class _PassengerChoicePageState extends State<PassengerChoicePage> {
+  late String selected = widget.options.first;
+  @override Widget build(BuildContext context) => PassengerSubpage(title: widget.title, subtitle: widget.subtitle, children: [for (final option in widget.options) Card(elevation: 0, margin: const EdgeInsets.only(bottom: 10), shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.black12), borderRadius: BorderRadius.circular(14)), child: RadioListTile<String>(title: Text(option), value: option, groupValue: selected, activeColor: green, onChanged: (value) => setState(() => selected = value!))) ]);
+}
+
+class PassengerSoundSettings extends StatefulWidget { const PassengerSoundSettings({super.key}); @override State<PassengerSoundSettings> createState() => _PassengerSoundSettingsState(); }
+class _PassengerSoundSettingsState extends State<PassengerSoundSettings> {
+  bool sounds = true, vibration = true;
+  @override Widget build(BuildContext context) => PassengerSubpage(title: 'Sons e vibração', subtitle: 'Configure os alertas do aplicativo', children: [SwitchListTile.adaptive(title: const Text('Sons do aplicativo'), subtitle: const Text('Reproduzir sons de confirmação e alertas'), value: sounds, activeColor: green, onChanged: (v) => setState(() => sounds = v)), SwitchListTile.adaptive(title: const Text('Vibração'), subtitle: const Text('Vibrar ao receber alertas importantes'), value: vibration, activeColor: green, onChanged: (v) => setState(() => vibration = v))]);
+}
+
+class PassengerAbout extends StatelessWidget { const PassengerAbout({super.key}); @override Widget build(BuildContext context) => PassengerSubpage(title: 'Sobre o eMove', subtitle: 'Informações do aplicativo', children: [const Center(child: Text('eMove', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: darkGreen))), const SizedBox(height: 12), const Center(child: Text('Versão 1.0.0', style: TextStyle(color: Colors.black54))), const SizedBox(height: 20), SecurityTile(icon: Icons.description_outlined, title: 'Termos de uso', subtitle: 'Leia os termos do eMove', onTap: () {}), SecurityTile(icon: Icons.privacy_tip_outlined, title: 'Política de privacidade', subtitle: 'Saiba como cuidamos dos seus dados', onTap: () {})]); }
 
 class PassengerAppPreferences extends StatefulWidget {
   const PassengerAppPreferences({super.key});
