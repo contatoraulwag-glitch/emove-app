@@ -452,7 +452,7 @@ class PassengerWallet extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(width: double.infinity, padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: const Color(0xFFE7F8EC), border: Border.all(color: Colors.black12), borderRadius: BorderRadius.circular(18)), child: Column(children: [const Icon(Icons.account_balance_wallet_outlined, color: darkGreen, size: 38), const SizedBox(height: 6), const Text('Saldo disponível', style: TextStyle(color: Colors.black54, fontSize: 16)), const Text('R\$ 100,00', style: TextStyle(color: darkGreen, fontSize: 30, fontWeight: FontWeight.w700)), const SizedBox(height: 12), SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Recarga de saldo estará disponível nesta etapa.'))), style: ElevatedButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white), child: const Text('Adicionar saldo')))])),
           const SizedBox(height: 16),
-          PassengerListTile(icon: Icons.credit_card, title: 'Forma de pagamento', subtitle: 'Cartão •••• 4567', onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gerenciamento de cartões estará disponível nesta etapa.')))),
+          PassengerListTile(icon: Icons.credit_card, title: 'Forma de pagamento', subtitle: 'Cartão •••• 4567', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PassengerPaymentMethods()))),
           const SizedBox(height: 14),
           const Text('Últimas transações', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: darkGreen)),
           const SizedBox(height: 10),
@@ -462,6 +462,36 @@ class PassengerWallet extends StatelessWidget {
           Center(child: TextButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Histórico completo estará disponível nesta etapa.'))), child: const Text('Ver todas as transações', style: TextStyle(color: darkGreen, fontSize: 16, fontWeight: FontWeight.w600)))),
         ]),
       );
+}
+
+class PassengerPaymentMethods extends StatefulWidget {
+  const PassengerPaymentMethods({super.key});
+  @override State<PassengerPaymentMethods> createState() => _PassengerPaymentMethodsState();
+}
+
+class _PassengerPaymentMethodsState extends State<PassengerPaymentMethods> {
+  final cardNumber = TextEditingController();
+  final cardName = TextEditingController();
+  final expiry = TextEditingController();
+  final cvv = TextEditingController();
+  bool pixEnabled = false;
+  @override void dispose() { cardNumber.dispose(); cardName.dispose(); expiry.dispose(); cvv.dispose(); super.dispose(); }
+  void addCard() {
+    if (cardNumber.text.replaceAll(RegExp(r'\\D'), '').length < 13 || cardName.text.trim().isEmpty || expiry.text.trim().isEmpty || cvv.text.trim().length < 3) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Preencha os dados do cartão corretamente.'))); return;
+    }
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cartão adicionado como forma de pagamento.')));
+  }
+  Widget field(String label, TextEditingController controller, {TextInputType? type}) => Padding(padding: const EdgeInsets.only(bottom: 12), child: TextField(controller: controller, keyboardType: type, decoration: InputDecoration(labelText: label, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)))));
+  @override Widget build(BuildContext context) => PassengerSubpage(title: 'Forma de pagamento', subtitle: 'Gerencie como suas viagens serão pagas', children: [
+    SecurityTile(icon: Icons.credit_card, title: 'Cartão principal', subtitle: '•••• 4567  •  Válido até 12/28', onTap: () => showModalBottomSheet(context: context, isScrollControlled: true, builder: (_) => Padding(padding: EdgeInsets.only(left: 20, right: 20, top: 22, bottom: MediaQuery.of(context).viewInsets.bottom + 20), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('Adicionar cartão', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: darkGreen)), const SizedBox(height: 16), field('Número do cartão', cardNumber, type: TextInputType.number), field('Nome no cartão', cardName), Row(children: [Expanded(child: field('Validade', expiry, type: TextInputType.datetime)), const SizedBox(width: 10), Expanded(child: field('CVV', cvv, type: TextInputType.number))]), SizedBox(width: double.infinity, child: ElevatedButton(onPressed: addCard, style: ElevatedButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white), child: const Text('Salvar cartão'))])))),
+    const SizedBox(height: 10),
+    OutlinedButton.icon(onPressed: () => showModalBottomSheet(context: context, isScrollControlled: true, builder: (_) => Padding(padding: EdgeInsets.only(left: 20, right: 20, top: 22, bottom: MediaQuery.of(context).viewInsets.bottom + 20), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('Adicionar cartão', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: darkGreen)), const SizedBox(height: 16), field('Número do cartão', cardNumber, type: TextInputType.number), field('Nome no cartão', cardName), Row(children: [Expanded(child: field('Validade', expiry, type: TextInputType.datetime)), const SizedBox(width: 10), Expanded(child: field('CVV', cvv, type: TextInputType.number))]), SizedBox(width: double.infinity, child: ElevatedButton(onPressed: addCard, style: ElevatedButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white), child: const Text('Salvar cartão'))])))), icon: const Icon(Icons.add, color: darkGreen), label: const Text('Adicionar cartão', style: TextStyle(color: darkGreen))),
+    const SizedBox(height: 20), const Text('Outras formas de pagamento', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: darkGreen)),
+    SwitchListTile.adaptive(title: const Text('Pix'), subtitle: const Text('Usar Pix quando disponível'), value: pixEnabled, activeColor: green, onChanged: (value) => setState(() => pixEnabled = value)),
+    const Padding(padding: EdgeInsets.only(top: 14), child: Text('Seus dados de pagamento são protegidos e não ficam armazenados diretamente no aplicativo.', style: TextStyle(color: Colors.black54))),
+  ]);
 }
 
 class PassengerProfile extends StatelessWidget {
