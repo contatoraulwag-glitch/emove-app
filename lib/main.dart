@@ -447,21 +447,19 @@ class PassengerTrips extends StatelessWidget {
 class PassengerWallet extends StatelessWidget {
   const PassengerWallet({super.key});
   @override
-  Widget build(BuildContext context) => const PassengerPageFrame(
+  Widget build(BuildContext context) => PassengerPageFrame(
         title: 'Carteira',
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          BalanceCard(),
-          SizedBox(height: 16),
-          PassengerListTile(icon: Icons.credit_card, title: 'Forma de pagamento', subtitle: 'Cartão •••• 4567'),
-          SizedBox(height: 14),
-          Text('Últimas transações', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-          SizedBox(height: 10),
-          PassengerListTile(icon: Icons.directions_car_outlined, title: 'Viagem', subtitle: '21 de jan • 09:14   - R\$ 18,90'),
-          PassengerListTile(icon: Icons.add_circle_outline, title: 'Recarga de saldo', subtitle: '20 de jan • 18:20   + R\$ 100,00'),
-          PassengerListTile(icon: Icons.directions_car_outlined, title: 'Viagem', subtitle: '19 de jan • 10:42   - R\$ 24,50'),
-          PassengerListTile(icon: Icons.add_circle_outline, title: 'Recarga de saldo', subtitle: '18 de jan • 08:15   + R\$ 50,00'),
-          PassengerListTile(icon: Icons.directions_car_outlined, title: 'Viagem', subtitle: '17 de jan • 19:30   - R\$ 16,80'),
-          PassengerListTile(icon: Icons.directions_car_outlined, title: 'Viagem', subtitle: '16 de jan • 07:55   - R\$ 12,90'),
+          Container(width: double.infinity, padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: const Color(0xFFE7F8EC), border: Border.all(color: Colors.black12), borderRadius: BorderRadius.circular(18)), child: Column(children: [const Icon(Icons.account_balance_wallet_outlined, color: darkGreen, size: 38), const SizedBox(height: 6), const Text('Saldo disponível', style: TextStyle(color: Colors.black54, fontSize: 16)), const Text('R\$ 100,00', style: TextStyle(color: darkGreen, fontSize: 30, fontWeight: FontWeight.w700)), const SizedBox(height: 12), SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Recarga de saldo estará disponível nesta etapa.'))), style: ElevatedButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white), child: const Text('Adicionar saldo')))])),
+          const SizedBox(height: 16),
+          PassengerListTile(icon: Icons.credit_card, title: 'Forma de pagamento', subtitle: 'Cartão •••• 4567', onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gerenciamento de cartões estará disponível nesta etapa.')))),
+          const SizedBox(height: 14),
+          const Text('Últimas transações', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: darkGreen)),
+          const SizedBox(height: 10),
+          const PassengerListTile(icon: Icons.directions_car_outlined, title: 'Viagem', subtitle: '20 de jan de 2025   - R\$ 18,90'),
+          const PassengerListTile(icon: Icons.add_circle_outline, title: 'Recarga de saldo', subtitle: '20 de jan de 2025   + R\$ 100,00'),
+          const PassengerListTile(icon: Icons.directions_car_outlined, title: 'Viagem', subtitle: '19 de jan de 2025   - R\$ 24,50'),
+          Center(child: TextButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Histórico completo estará disponível nesta etapa.'))), child: const Text('Ver todas as transações', style: TextStyle(color: darkGreen, fontSize: 16, fontWeight: FontWeight.w600)))),
         ]),
       );
 }
