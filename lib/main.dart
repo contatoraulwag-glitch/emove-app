@@ -485,7 +485,17 @@ class _PassengerPaymentMethodsState extends State<PassengerPaymentMethods> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cartão adicionado como forma de pagamento.')));
   }
   Widget field(String label, TextEditingController controller, {TextInputType? type}) => Padding(padding: const EdgeInsets.only(bottom: 12), child: TextField(controller: controller, keyboardType: type, decoration: InputDecoration(labelText: label, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)))));
-  Widget cardForm() => Padding(padding: EdgeInsets.only(left: 20, right: 20, top: 22, bottom: MediaQuery.of(context).viewInsets.bottom + 20), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('Adicionar cartão', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: darkGreen)), const SizedBox(height: 16), field('Número do cartão', cardNumber, type: TextInputType.number), field('Nome no cartão', cardName), Row(children: [Expanded(child: field('Validade', expiry, type: TextInputType.datetime)), const SizedBox(width: 10), Expanded(child: field('CVV', cvv, type: TextInputType.number))]), SizedBox(width: double.infinity, child: ElevatedButton(onPressed: addCard, style: ElevatedButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white), child: const Text('Salvar cartão'))]));
+  Widget cardForm() => Padding(
+    padding: EdgeInsets.only(left: 20, right: 20, top: 22, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+    child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Text('Adicionar cartão', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: darkGreen)),
+      const SizedBox(height: 16),
+      field('Número do cartão', cardNumber, type: TextInputType.number),
+      field('Nome no cartão', cardName),
+      Row(children: [Expanded(child: field('Validade', expiry, type: TextInputType.datetime)), const SizedBox(width: 10), Expanded(child: field('CVV', cvv, type: TextInputType.number))]),
+      SizedBox(width: double.infinity, child: ElevatedButton(onPressed: addCard, style: ElevatedButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white), child: const Text('Salvar cartão'))),
+    ]),
+  );
   void openCardForm() => showModalBottomSheet(context: context, isScrollControlled: true, builder: (_) => cardForm());
   @override
   Widget build(BuildContext context) => PassengerSubpage(title: 'Forma de pagamento', subtitle: 'Gerencie como suas viagens serão pagas', children: [SecurityTile(icon: Icons.credit_card, title: 'Cartão principal', subtitle: '•••• 4567  •  Válido até 12/28', onTap: openCardForm), const SizedBox(height: 10), OutlinedButton.icon(onPressed: openCardForm, icon: const Icon(Icons.add, color: darkGreen), label: const Text('Adicionar cartão', style: TextStyle(color: darkGreen))), const SizedBox(height: 20), const Text('Outras formas de pagamento', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: darkGreen)), SwitchListTile.adaptive(title: const Text('Pix'), subtitle: const Text('Usar Pix quando disponível'), value: pixEnabled, activeColor: green, onChanged: (value) => setState(() => pixEnabled = value)), const Padding(padding: EdgeInsets.only(top: 14), child: Text('Seus dados de pagamento são protegidos e não ficam armazenados diretamente no aplicativo.', style: TextStyle(color: Colors.black54)))]);
