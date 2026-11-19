@@ -500,7 +500,7 @@ class _PassengerPaymentMethodsState extends State<PassengerPaymentMethods> {
   );
   void openCardForm() => showModalBottomSheet(context: context, isScrollControlled: true, builder: (_) => cardForm());
   @override
-  Widget build(BuildContext context) => PassengerSubpage(title: 'Forma de pagamento', subtitle: 'Gerencie como suas viagens serão pagas', children: [SecurityTile(icon: Icons.credit_card, title: 'Cartão principal', subtitle: '•••• 4567  •  Válido até 12/28', onTap: openCardForm), const SizedBox(height: 10), OutlinedButton.icon(onPressed: openCardForm, icon: const Icon(Icons.add, color: darkGreen), label: const Text('Adicionar cartão', style: TextStyle(color: darkGreen))), const SizedBox(height: 20), const Text('Outras formas de pagamento', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: darkGreen)), SwitchListTile.adaptive(title: const Text('Pix'), subtitle: const Text('Usar Pix quando disponível'), value: pixEnabled, activeColor: green, onChanged: (value) => setState(() => pixEnabled = value)), const Padding(padding: EdgeInsets.only(top: 14), child: Text('Seus dados de pagamento são protegidos e não ficam armazenados diretamente no aplicativo.', style: TextStyle(color: Colors.black54)))]);
+  Widget build(BuildContext context) => PassengerSubpage(selectedIndex: 2, title: 'Forma de pagamento', subtitle: 'Gerencie como suas viagens serão pagas', children: [SecurityTile(icon: Icons.credit_card, title: 'Cartão principal', subtitle: '•••• 4567  •  Válido até 12/28', onTap: openCardForm), const SizedBox(height: 10), OutlinedButton.icon(onPressed: openCardForm, icon: const Icon(Icons.add, color: darkGreen), label: const Text('Adicionar cartão', style: TextStyle(color: darkGreen))), const SizedBox(height: 20), const Text('Outras formas de pagamento', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: darkGreen)), SwitchListTile.adaptive(title: const Text('Pix'), subtitle: const Text('Usar Pix quando disponível'), value: pixEnabled, activeColor: green, onChanged: (value) => setState(() => pixEnabled = value)), const Padding(padding: EdgeInsets.only(top: 14), child: Text('Seus dados de pagamento são protegidos e não ficam armazenados diretamente no aplicativo.', style: TextStyle(color: Colors.black54)))]);
 }
 
 class PassengerProfile extends StatelessWidget {
@@ -856,7 +856,8 @@ class PassengerSubpage extends StatelessWidget {
   final String title;
   final String subtitle;
   final List<Widget> children;
-  const PassengerSubpage({super.key, required this.title, required this.subtitle, required this.children});
+  final int selectedIndex;
+  const PassengerSubpage({super.key, required this.title, required this.subtitle, required this.children, this.selectedIndex = 3});
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Colors.white,
@@ -869,7 +870,7 @@ class PassengerSubpage extends StatelessWidget {
             ...children,
           ]))),
         ])),
-        bottomNavigationBar: NavigationBar(selectedIndex: 3, onDestinationSelected: (value) => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => PassengerShell(initialIndex: value)), (_) => false), destinations: const [NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Início'), NavigationDestination(icon: Icon(Icons.route_outlined), label: 'Viagens'), NavigationDestination(icon: Icon(Icons.account_balance_wallet_outlined), label: 'Carteira'), NavigationDestination(icon: Icon(Icons.person), label: 'Perfil')]),
+        bottomNavigationBar: NavigationBar(selectedIndex: selectedIndex, onDestinationSelected: (value) => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => PassengerShell(initialIndex: value)), (_) => false), destinations: const [NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Início'), NavigationDestination(icon: Icon(Icons.route_outlined), label: 'Viagens'), NavigationDestination(icon: Icon(Icons.account_balance_wallet_outlined), label: 'Carteira'), NavigationDestination(icon: Icon(Icons.person), label: 'Perfil')]),
       );
 }
 class SecurityTile extends StatelessWidget { final IconData icon; final String title; final String subtitle; final VoidCallback onTap; const SecurityTile({super.key, required this.icon, required this.title, required this.subtitle, required this.onTap}); @override Widget build(BuildContext context) => Padding(padding: const EdgeInsets.only(bottom: 10), child: InkWell(onTap: onTap, borderRadius: BorderRadius.circular(14), child: Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(border: Border.all(color: Colors.black12), borderRadius: BorderRadius.circular(14)), child: Row(children: [Icon(icon, color: green, size: 28), const SizedBox(width: 12), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)), Text(subtitle, style: const TextStyle(color: Colors.black54))])), const Icon(Icons.chevron_right, color: Colors.black45)])))); }
