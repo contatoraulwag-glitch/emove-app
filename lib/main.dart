@@ -108,17 +108,26 @@ class CreateAccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(child: Padding(padding: const EdgeInsets.all(24), child: Column(children: [
-        const SizedBox(height: 24), const EmoveLogo(width: 300, height: 70), const Spacer(),
-        const Text('Crie sua conta', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: darkGreen)),
-        const SizedBox(height: 8), const Text('Comece sua jornada com o eMove', textAlign: TextAlign.center, style: TextStyle(fontSize: 17, color: Colors.black54)),
-        const SizedBox(height: 30),
-        SizedBox(width: double.infinity, child: FilledButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationScreen())), style: FilledButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white), child: const Text('Criar conta'))),
-        const SizedBox(height: 18), const OrDivider(), const SizedBox(height: 18),
-        SizedBox(width: double.infinity, child: OutlinedButton.icon(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationScreen())), icon: const Text('G', style: TextStyle(fontSize: 24, color: Color(0xFF4285F4))), label: const Text('Continuar com Google'))),
-        const Spacer(), const Text('Ao continuar, você concorda com os Termos de uso e a Política de privacidade.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54, fontSize: 12)), const SizedBox(height: 18),
-        GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen())), child: const Text('Já possui uma conta? Acesse sua conta', style: TextStyle(color: darkGreen, fontWeight: FontWeight.w700, decoration: TextDecoration.underline))),
-      ]))),
+      body: SafeArea(
+        child: LayoutBuilder(builder: (context, constraints) {
+          return TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 2000),
+            curve: Curves.easeOutCubic,
+            builder: (context, progress, child) => Opacity(
+              opacity: progress,
+              child: Transform.translate(offset: Offset(0, 18 * (1 - progress)), child: child),
+            ),
+            child: Stack(children: [
+              Positioned.fill(child: Image.asset('assets/onboarding_scene.jpeg', fit: BoxFit.cover)),
+              Positioned(left: 0, right: 0, top: constraints.maxHeight * .70, height: constraints.maxHeight * .16, child: Row(children: [
+                Expanded(child: GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationScreen())))),
+                Expanded(child: GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen())))),
+              ])),
+            ]),
+          );
+        }),
+      ),
     );
   }
 }

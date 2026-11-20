@@ -63,6 +63,7 @@ flutter:
 
   assets:
     - assets/logo_oficial_transparente.png
+    - assets/onboarding_scene.jpeg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
