@@ -102,13 +102,28 @@ class _SplashScreenState extends State<SplashScreen>
       );
 }
 
-class CreateAccountScreen extends StatefulWidget {
+class CreateAccountScreen extends StatelessWidget {
   const CreateAccountScreen({super.key});
   @override
-  State<CreateAccountScreen> createState() => _CreateAccountScreenState();
+  Widget build(BuildContext context) => Scaffold(backgroundColor: Colors.white, body: SafeArea(child: Padding(padding: const EdgeInsets.fromLTRB(24, 34, 24, 24), child: Column(children: [const SizedBox(height: 24), const EmoveLogo(width: 300, height: 70), const Spacer(), const Text('Crie sua conta', textAlign: TextAlign.center, style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: darkGreen)), const SizedBox(height: 8), const Text('Comece sua jornada com o eMove', textAlign: TextAlign.center, style: TextStyle(fontSize: 17, color: Colors.black54)), const SizedBox(height: 30), SizedBox(width: double.infinity, child: FilledButton(onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RegistrationScreen())), style: FilledButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(52)), child: const Text('Criar conta'))), const SizedBox(height: 18), const OrDivider(), const SizedBox(height: 18), SizedBox(width: double.infinity, child: OutlinedButton.icon(onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RegistrationScreen())), icon: const Text('G', style: TextStyle(fontSize: 24, color: Color(0xFF4285F4), fontWeight: FontWeight.w700)), label: const Text('Continuar com Google'), style: OutlinedButton.styleFrom(foregroundColor: darkGreen, minimumSize: const Size.fromHeight(52)))), const Spacer(), const Text('Ao continuar, você concorda com os Termos de uso e a Política de privacidade.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54, fontSize: 12)), const SizedBox(height: 18), Wrap(alignment: WrapAlignment.center, children: [const Text('Já possui uma conta? ', style: TextStyle(color: Colors.black54, fontSize: 15)), GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LoginScreen())), child: const Text('Acesse sua conta', style: TextStyle(color: darkGreen, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)))])])));
 }
 
-class _CreateAccountScreenState extends State<CreateAccountScreen> {
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+  @override State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  bool obscure = true, accepted = false;
+  @override Widget build(BuildContext context) => Scaffold(backgroundColor: Colors.white, body: SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.fromLTRB(22, 16, 22, 24), child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Row(children: [IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back, color: darkGreen)), const Spacer()]), const Center(child: EmoveLogo()), const SizedBox(height: 12), const Text('Criar sua conta', textAlign: TextAlign.center, style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: darkGreen)), const SizedBox(height: 6), const Text('Preencha seus dados para começar', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)), const SizedBox(height: 20), const TextField(decoration: InputDecoration(labelText: 'Nome completo', prefixIcon: Icon(Icons.person_outline), border: OutlineInputBorder())), const SizedBox(height: 12), const TextField(keyboardType: TextInputType.phone, decoration: InputDecoration(labelText: 'Telefone', prefixIcon: Icon(Icons.phone_outlined), border: OutlineInputBorder())), const SizedBox(height: 12), const TextField(keyboardType: TextInputType.emailAddress, decoration: InputDecoration(labelText: 'E-mail', prefixIcon: Icon(Icons.mail_outline), border: OutlineInputBorder())), const SizedBox(height: 12), TextField obscureText: obscure, decoration: InputDecoration(labelText: 'Senha', prefixIcon: const Icon(Icons.lock_outline), suffixIcon: IconButton(onPressed: () => setState(() => obscure = !obscure), icon: Icon(obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined)), border: const OutlineInputBorder()), const SizedBox(height: 12), CheckboxListTile(value: accepted, onChanged: (value) => setState(() => accepted = value ?? false), title: const Text('Li e aceito os Termos de uso e a Política de privacidade.'), controlAffinity: ListTileControlAffinity.leading, contentPadding: EdgeInsets.zero), const SizedBox(height: 8), FilledButton(onPressed: accepted ? () => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const PassengerShell()), (_) => false) : null, style: FilledButton.styleFrom(backgroundColor: green, minimumSize: const Size.fromHeight(50)), child: const Text('Criar conta')), const SizedBox(height: 16), const OrDivider(), const SizedBox(height: 16), OutlinedButton.icon(onPressed: () {}, icon: const Text('G', style: TextStyle(fontSize: 22, color: Color(0xFF4285F4), fontWeight: FontWeight.w700)), label: const Text('Continuar com Google'), style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(50))), const SizedBox(height: 18), Center(child: GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LoginScreen())), child: const Text('Já possui uma conta? Acesse sua conta', style: TextStyle(color: darkGreen, fontWeight: FontWeight.w700, decoration: TextDecoration.underline))))])));
+}
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   bool obscure = true;
   final _scrollController = ScrollController();
   final _emailKey = GlobalKey();
@@ -284,7 +299,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           style: TextStyle(color: Colors.black54, fontSize: 15),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RegistrationScreen())),
                           child: const Text(
                             'Criar conta',
                             style: TextStyle(
