@@ -108,19 +108,19 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> with SingleTickerProviderStateMixin {
-  late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 2100))..forward();
+  late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 3200))..forward();
   @override void dispose() { controller.dispose(); super.dispose(); }
   @override
   Widget build(BuildContext context) => Scaffold(backgroundColor: Colors.white, body: SafeArea(child: AnimatedBuilder(animation: controller, builder: (context, _) {
-    final route = Curves.easeOut.transform(Interval(.05, .48).transform(controller.value));
-    final person = Curves.easeOutCubic.transform(Interval(.10, .66).transform(controller.value));
-    final car = Curves.easeOutCubic.transform(Interval(.24, .80).transform(controller.value));
-    final actions = Curves.easeOut.transform(Interval(.58, 1).transform(controller.value));
+    final route = Curves.easeOut.transform(Interval(.02, .28).transform(controller.value));
+    final person = Curves.easeOutCubic.transform(Interval(.24, .52).transform(controller.value));
+    final car = Curves.easeOutCubic.transform(Interval(.42, .72).transform(controller.value));
+    final actions = Curves.easeOutCubic.transform(Interval(.70, 1).transform(controller.value));
     return Stack(children: [
-      Positioned.fill(child: Column(children: [const SizedBox(height: 14), const EmoveLogo(width: 240, height: 58), const SizedBox(height: 6), const Text('Mobilidade inteligente\npara o seu dia a dia', textAlign: TextAlign.center, style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700, color: darkGreen)), Expanded(child: Opacity(opacity: route, child: Image.asset('assets/onboarding_route.jpeg', fit: BoxFit.cover, width: double.infinity))), const SizedBox(height: 220)])),
-      Positioned(left: -120 + (person * 135), bottom: 170, width: 240, child: Opacity(opacity: person, child: Image.asset('assets/onboarding_person.png', fit: BoxFit.contain))),
-      Positioned(right: -180 + (car * 210), bottom: 180, width: 410, child: Opacity(opacity: car, child: Image.asset('assets/onboarding_car.png', fit: BoxFit.contain))),
-      Positioned(left: 24, right: 24, bottom: 88, child: Opacity(opacity: actions, child: Column(children: [SizedBox(width: double.infinity, child: FilledButton.icon(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationScreen())), icon: const Icon(Icons.person_add_alt_1), label: const Text('Criar sua conta'), style: FilledButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(50))),), const SizedBox(height: 10), SizedBox(width: double.infinity, child: OutlinedButton.icon(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen())), icon: const Icon(Icons.login, color: darkGreen), label: const Text('Entrar na sua conta', style: TextStyle(color: darkGreen)), style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(50))))]))),
+      Positioned.fill(child: Column(children: [const SizedBox(height: 14), const EmoveLogo(width: 240, height: 58), const SizedBox(height: 6), const Text('Mobilidade inteligente\npara o seu dia a dia', textAlign: TextAlign.center, style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700, color: darkGreen)), Expanded(child: Padding(padding: const EdgeInsets.only(top: 8, bottom: 206), child: Opacity(opacity: route, child: Image.asset('assets/onboarding_route.jpeg', fit: BoxFit.contain, width: double.infinity))))])),
+      Positioned(left: -115 + (person * 145), bottom: 194, width: 255, height: 430, child: Opacity(opacity: person, child: Image.asset('assets/onboarding_person.png', fit: BoxFit.contain, alignment: Alignment.bottomLeft))),
+      Positioned(right: -185 + (car * 220), bottom: 210, width: 430, height: 270, child: Opacity(opacity: car, child: Image.asset('assets/onboarding_car.png', fit: BoxFit.contain, alignment: Alignment.bottomRight))),
+      Positioned(left: 24, right: 24, bottom: 40, child: Opacity(opacity: actions, child: Column(children: [SizedBox(width: double.infinity, child: FilledButton.icon(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationScreen())), icon: const Icon(Icons.person_add_alt_1), label: const Text('Criar sua conta'), style: FilledButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(52), shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(28))))),), const SizedBox(height: 10), SizedBox(width: double.infinity, child: OutlinedButton.icon(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen())), icon: const Icon(Icons.login, color: darkGreen), label: const Text('Entrar na sua conta', style: TextStyle(color: darkGreen)), style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(52), side: const BorderSide(color: darkGreen, width: 2), shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(28)))))]))),
     ]);
   })));
 }
