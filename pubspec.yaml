@@ -64,6 +64,9 @@ flutter:
   assets:
     - assets/logo_oficial_transparente.png
     - assets/onboarding_scene.jpeg
+    - assets/onboarding_route.jpeg
+    - assets/onboarding_car.png
+    - assets/onboarding_person.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

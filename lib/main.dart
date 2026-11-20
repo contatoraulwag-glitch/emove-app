@@ -102,34 +102,27 @@ class _SplashScreenState extends State<SplashScreen>
       );
 }
 
-class CreateAccountScreen extends StatelessWidget {
+class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
+  @override State<CreateAccountScreen> createState() => _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends State<CreateAccountScreen> with SingleTickerProviderStateMixin {
+  late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 2100))..forward();
+  @override void dispose() { controller.dispose(); super.dispose(); }
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: LayoutBuilder(builder: (context, constraints) {
-          return TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: 1),
-            duration: const Duration(milliseconds: 2000),
-            curve: Curves.easeOutCubic,
-            builder: (context, progress, child) => Opacity(
-              opacity: progress,
-              child: Transform.translate(offset: Offset(0, 18 * (1 - progress)), child: child),
-            ),
-            child: Stack(children: [
-              Positioned.fill(child: Image.asset('assets/onboarding_scene.jpeg', fit: BoxFit.cover)),
-              Positioned(left: 0, right: 0, top: constraints.maxHeight * .70, height: constraints.maxHeight * .16, child: Row(children: [
-                Expanded(child: GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationScreen())))),
-                Expanded(child: GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen())))),
-              ])),
-            ]),
-          );
-        }),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(backgroundColor: Colors.white, body: SafeArea(child: AnimatedBuilder(animation: controller, builder: (context, _) {
+    final route = Curves.easeOut.transform(Interval(.05, .48).transform(controller.value));
+    final person = Curves.easeOutCubic.transform(Interval(.10, .66).transform(controller.value));
+    final car = Curves.easeOutCubic.transform(Interval(.24, .80).transform(controller.value));
+    final actions = Curves.easeOut.transform(Interval(.58, 1).transform(controller.value));
+    return Stack(children: [
+      Positioned.fill(child: Column(children: [const SizedBox(height: 14), const EmoveLogo(width: 240, height: 58), const SizedBox(height: 6), const Text('Mobilidade inteligente\npara o seu dia a dia', textAlign: TextAlign.center, style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700, color: darkGreen)), Expanded(child: Opacity(opacity: route, child: Image.asset('assets/onboarding_route.jpeg', fit: BoxFit.cover, width: double.infinity))), const SizedBox(height: 220)])),
+      Positioned(left: -120 + (person * 135), bottom: 170, width: 240, child: Opacity(opacity: person, child: Image.asset('assets/onboarding_person.png', fit: BoxFit.contain))),
+      Positioned(right: -180 + (car * 210), bottom: 180, width: 410, child: Opacity(opacity: car, child: Image.asset('assets/onboarding_car.png', fit: BoxFit.contain))),
+      Positioned(left: 24, right: 24, bottom: 88, child: Opacity(opacity: actions, child: Column(children: [SizedBox(width: double.infinity, child: FilledButton.icon(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationScreen())), icon: const Icon(Icons.person_add_alt_1), label: const Text('Criar sua conta'), style: FilledButton.styleFrom(backgroundColor: green, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(50))),), const SizedBox(height: 10), SizedBox(width: double.infinity, child: OutlinedButton.icon(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen())), icon: const Icon(Icons.login, color: darkGreen), label: const Text('Entrar na sua conta', style: TextStyle(color: darkGreen)), style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(50))))]))),
+    ]);
+  })));
 }
 
 class RegistrationScreen extends StatefulWidget {
